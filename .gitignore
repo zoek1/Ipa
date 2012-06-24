@@ -1,0 +1,8 @@
+# Omitira los bytecode de python
+
+*.pyc
+
+# Omitir los archivos de backup
+
+*~
+\#*
