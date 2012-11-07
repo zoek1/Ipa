@@ -27,14 +27,14 @@ import pdb
 import EsquemaT
 
 # Colores de salida
-MORADO   = '\033[95m'
-AZUL     = '\033[94m'
-VERDE    = '\033[92m'
-AMARILLO = '\033[93m'
-ROJO     = '\033[91m'
-NINGUNO  = '\033[0m'
+_MORADO   = '\033[95m'
+_AZUL     = '\033[94m'
+_VERDE    = '\033[92m'
+_AMARILLO = '\033[93m'
+_ROJO     = '\033[91m'
+_NINGUNO  = '\033[0m'
 
-COLOR = True
+_COLOR = True
 
 # Atributos del tema necesarios
 Tema = {"Esquema"     : "Plymouth Theme",
@@ -43,7 +43,7 @@ Tema = {"Esquema"     : "Plymouth Theme",
         "ModuleName"  : ""}
 
 
-def ObtenerAtributos(NombreArchivo,COLOR=False):
+def ObtenerAtributos(NombreArchivo,_COLOR=False):
     """
     Obtener los atributos de un archivo con extension .plymouth
     y codificarlos.
@@ -92,10 +92,10 @@ def ObtenerAtributos(NombreArchivo,COLOR=False):
                         # else:
                         #     diccionario[atributo[0]]=atributo[1]
 
-                        if COLOR:
-                            print("\t|--->",MORADO, "Asociacion", AZUL,
-                                  atributo[0],NINGUNO, " - ", VERDE,
-                                  atributo[1], NINGUNO)
+                        if _COLOR:
+                            print("\t|--->",_MORADO, "Asociacion", _AZUL,
+                                  atributo[0],_NINGUNO, " - ", _VERDE,
+                                  atributo[1], _NINGUNO)
                         else:
                             print("\t|--->", "Asociacion", atributo[0],
                                   " - ", atributo[1])
@@ -116,7 +116,7 @@ def ObtenerAtributos(NombreArchivo,COLOR=False):
 
         return ListaEsquemas
 
-def EscribirEsquema(Archivo,Esquema,Modo="a+"):
+def _EscribirEsquema(Archivo,Esquema,Modo="a+"):
     """Escribir al archivo los campos del diccionario
     dando las rutas correctas y el posicionamiento de imagenes
     adecuado para tratar de evitar conflictos.
@@ -138,6 +138,7 @@ def EscribirEsquema(Archivo,Esquema,Modo="a+"):
             Plymouth.write(Atributos + " = " +
                            Esquema.getElemento(Atributos) +"\n")
 
+        Plymouth.write("\n")
         Plymouth.close()
 
 
@@ -159,7 +160,7 @@ def EscribirPlymouth(NombreArchivo,ListEsquemas, Modo="a+"):
 
     for Esquemas in ListEsquemas:
         print("Escribiendo Esquema: %s " % Esquemas.getTitle())
-        EscribirEsquema(NombreArchivo, Esquemas, Modo)
+        _EscribirEsquema(NombreArchivo, Esquemas, Modo)
 
 
 
@@ -176,7 +177,7 @@ def setTitulo(Titulo = None, Esquema = None):
         Esquema = EsquemaT.Esquema()
 
     while not Titulo:
-        Titulo = raw_input("Introduce el Nombre del plymouth")
+        Titulo = input("Introduce el Nombre del plymouth")
     print("Nombre del esquema: " + Titulo)
     Esquema.setTitle(Titulo)
 
@@ -199,15 +200,15 @@ def LeerEsquema(Titulo = None, Esquema = None):
         valor    = None
 
         while not atributo:
-            atributo = raw_input("Introduce el identificador atributo: ")
+            atributo = input("Introduce el identificador atributo: ")
 
         while not valor:
-            valor = raw_input("Introduce el valor del atributo: ")
+            valor = input("Introduce el valor del atributo: ")
 
         # Establecer elemento del esquema
         esquema.setElemento(atributo,valor)
 
-        opcion = raw_input("Desea ingresar otro campo para el esquema s/n")
+        opcion = input("Desea ingresar otro campo para el esquema s/n")
 
     return esquema
 
@@ -226,13 +227,13 @@ def IPlymouth():
     Cabecera.setTitle("Plymouth Theme")
 
     while not Name:
-        Name = raw_input("Introduce el nombre del tema: ")
+        Name = input("Introduce el nombre del tema: ")
 
     while not Description:
-        Description = raw_input("Introduce una descripcion del tema: ")
+        Description = input("Introduce una descripcion del tema: ")
 
     while not ModuleName:
-        ModuleName = raw_input("Introduce el nombre del modulo del plymouth: ")
+        ModuleName = input("Introduce el nombre del modulo del plymouth: ")
 
     Cabecera.setElemento("Name", Name)
     Cabecera.setElemento("Description", Description)
@@ -240,10 +241,10 @@ def IPlymouth():
 
     if ModuleName == "script":
         while not ImageDir:
-            ImageDir = raw_input("Directorio de Imagenes para el plymouth: ")
+            ImageDir = input("Directorio de Imagenes para el plymouth: ")
 
         while not ScriptFile:
-            ScriptFile = raw_input("Direccion del archivo script del plymouth: ")
+            ScriptFile = input("Direccion del archivo script del plymouth: ")
 
         Modulo.setTitle(ModuleName )
         Modulo.setElemento("ImageDir", ImageDir)

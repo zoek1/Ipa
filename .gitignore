@@ -6,3 +6,15 @@
 
 *~
 \#*
+
+Omitir archivos ocultos
+.*
+
+Evitar TAGS
+TAGS
+tags
+
+Evitar comprimidos
+
+*.gz
+*.zip
