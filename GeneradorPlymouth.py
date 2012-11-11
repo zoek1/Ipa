@@ -22,7 +22,7 @@
 #
 
 import os
-
+import re
 import pdb
 import EsquemaT
 
@@ -45,7 +45,7 @@ Tema = {"Esquema"     : "Plymouth Theme",
 
 def ObtenerAtributos(NombreArchivo,_COLOR=False):
     """
-    Obtener los atributos de un archivo con extension .plymouth
+    Obtener los Cadenas de un archivo con extension .plymouth
     y codificarlos.
 
     Arguments:
@@ -53,21 +53,18 @@ def ObtenerAtributos(NombreArchivo,_COLOR=False):
     """
     # pdb.set_trace()
     ListaEsquemas = []
-
+    title = re.compile("\[.*\]")
+    element = re.compile(".*=.*")
     # El esquema por default es "Plymouth Theme"
 
-    bytes = 0
     try:
         ArchivoPlymouth = open(NombreArchivo)
     except IOError:
         print("Error en apertura de Archivo: ", NombreArchivo)
     else:
         for Cadena in ArchivoPlymouth:
-            bytes += len(Cadena)
 
-            if Cadena == "\n":
-                continue
-            if (Cadena.count("[") + Cadena.count("]") == 2):
+            if title.match(Cadena):
 
                 Cadena = Cadena.strip("[")
                 Cadena = Cadena.strip("\n")
@@ -75,42 +72,22 @@ def ObtenerAtributos(NombreArchivo,_COLOR=False):
                 print("Esquema encontrado", Cadena)
 
                 EsquemaActual = EsquemaT.Esquema(Cadena)
-
-                for atributo in ArchivoPlymouth:
-                    bytes += len(atributo)
-                    if atributo == "\n":
-                        continue
-                    elif atributo.count("=") == 1:
-                        atributo = atributo.split("=")
-                        atributo[0] = atributo[0].strip()
-                        atributo[1] = atributo[1].strip("\n")
-
-                        EsquemaActual.setElemento(atributo[0],atributo[1])
-                        # if EsquemaActual == "Plymouth Theme]":
-                        #     Tema[atributo[0]] = atributo[1]
-                        #     diccionario = Tema
-                        # else:
-                        #     diccionario[atributo[0]]=atributo[1]
-
-                        if _COLOR:
-                            print("\t|--->",_MORADO, "Asociacion", _AZUL,
-                                  atributo[0],_NINGUNO, " - ", _VERDE,
-                                  atributo[1], _NINGUNO)
-                        else:
-                            print("\t|--->", "Asociacion", atributo[0],
-                                  " - ", atributo[1])
-                    else:
-                        bytes -= len(atributo)
-
-                        # try:
-                        #     ArchivoPlymouth.seek(ArchivoPlymouth.tell() -
-                        #                          len(atributo))
-                        # except IOError:
-                        #     print("Reasignacion de puntero en fichero")
-
-                        break
-                ArchivoPlymouth.seek(bytes)
                 ListaEsquemas.append(EsquemaActual)
+
+            if element.match(Cadena):
+                Cadena = Cadena.split("=")
+                Cadena[0] = Cadena[0].strip()
+                Cadena[1] = Cadena[1].strip("\n")
+
+                ListaEsquemas[-1].setElemento(Cadena[0],Cadena[1])
+
+                if _COLOR:
+                    print("\t|--->",_MORADO, "Asociacion", _AZUL,
+                          Cadena[0],_NINGUNO, " - ", _VERDE,
+                          Cadena[1], _NINGUNO)
+                else:
+                    print("\t|--->", "Asociacion", Cadena[0],
+                          " - ", Cadena[1])
 
         ArchivoPlymouth.close()
 
@@ -186,7 +163,7 @@ def setTitulo(Titulo = None, Esquema = None):
 
 def LeerEsquema(Titulo = None, Esquema = None):
     """Establece un metodo para introducir el identificador del esquema,
-    y sus respectivos elementos como son los atributo y su valor.
+    y sus respectivos elementos como son los Cadena y su valor.
 
     Devolvera un objeto de tipo Esquema.
     """
@@ -196,17 +173,17 @@ def LeerEsquema(Titulo = None, Esquema = None):
     esquema = setTitulo(Titulo = Titulo, Esquema=Esquema)
 
     while opcion == "s" or opcion == "S":
-        atributo = None
+        Cadena = None
         valor    = None
 
-        while not atributo:
-            atributo = input("Introduce el identificador atributo: ")
+        while not Cadena:
+            Cadena = input("Introduce el identificador Cadena: ")
 
         while not valor:
-            valor = input("Introduce el valor del atributo: ")
+            valor = input("Introduce el valor del Cadena: ")
 
         # Establecer elemento del esquema
-        esquema.setElemento(atributo,valor)
+        esquema.setElemento(Cadena,valor)
 
         opcion = input("Desea ingresar otro campo para el esquema s/n")
 
@@ -260,8 +237,8 @@ def IPlymouth():
 
 
 
-#if __name__ == "__main":
+if __name__ == "__main__":
 #Esquema = ObtenerAtributos("Walking.plymouth")
 #LeerEsquema
 #EscribirPlymouth("salida.plymouth",Esquema)
-#IPlymouth()
+    IPlymouth()
